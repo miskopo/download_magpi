@@ -4,7 +4,8 @@
 # check if wget is installed
 [[ -z $(command -v wget) ]] && { echo "wget is required" >&2; exit 1; }
 
-BASE_URL="https://www.raspberrypi.org/magpi-issues/MagPi${ISSUE_NUMBER}.pdf"
+BASE_URL="https://www.raspberrypi.org/magpi-issues/MagPi"
+TARGET_PATH=""
 
 usage(){
 	echo "helptext placeholder"
@@ -27,5 +28,19 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
+
+BEGIN_RANGE=$(echo $ISSUE_NUMBER | cut -d "-" -f1);
+END_RANGE=$(echo $ISSUE_NUMBER | cut -d "-" -f2);
+
+[[ -z $END_RANGE ]] && END_RANGE=$BEGIN_RANGE;
+echo $BEGIN_RANGE;
+echo $END_RANGE;
+
+[[ -z "$TARGET_PATH" ]] && TARGET_PATH="."
+
+# Download issue(s)
+for ISSUE_NUMBER in $(seq $BEGIN_RANGE $END_RANGE); do
+	wget -P $TARGET_PATH --show-progress "${BASE_URL}${ISSUE_NUMBER}".pdf;
+done;
 
 exit 0
