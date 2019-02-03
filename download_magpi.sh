@@ -8,7 +8,8 @@ BASE_URL="https://www.raspberrypi.org/magpi-issues/MagPi"
 TARGET_PATH=""
 
 usage(){
-	echo "helptext placeholder"
+	echo "Usage: 	download_magpi -n [--number] 20 -o [--output] ~/Books
+	download_magpi -n [--number] 45-49 [. as -o is implicit]"
 }
 
 [[ $# -lt 1 ]] && { usage; exit 1; }
@@ -32,10 +33,12 @@ done
 BEGIN_RANGE=$(echo $ISSUE_NUMBER | cut -d "-" -f1);
 END_RANGE=$(echo $ISSUE_NUMBER | cut -d "-" -f2);
 
+# set END_RANGE to BEGIN_RANGE if only one number was given
 [[ -z $END_RANGE ]] && END_RANGE=$BEGIN_RANGE;
 echo $BEGIN_RANGE;
 echo $END_RANGE;
 
+# is no path was given, use current directory
 [[ -z "$TARGET_PATH" ]] && TARGET_PATH="."
 
 # Download issue(s)
