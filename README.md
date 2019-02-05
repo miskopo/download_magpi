@@ -5,6 +5,7 @@ This script downloads issue with provided number from MagPi server.
 # Parameters
 
 -n | --number  - issue number, or range of numbers to download, e.g. 72, 78-90
+
 -o | --output  - output folder, `.` is implicit
 
 # Usage
