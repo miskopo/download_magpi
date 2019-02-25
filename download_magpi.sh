@@ -3,6 +3,8 @@
 
 # check if wget is installed
 [[ -z $(command -v wget) ]] && { echo "wget is required" >&2; exit 1; }
+# [optional] check for calibre in order to import downloaded issue
+[[ -z $(command -v calibredb) ]] && { echo "Calibre not installed, not autoimporting"; } || SERIES="The MagPi"
 
 BASE_URL="https://www.raspberrypi.org/magpi-issues/MagPi"
 TARGET_PATH=""
@@ -45,5 +47,10 @@ echo $END_RANGE;
 for ISSUE_NUMBER in $(seq $BEGIN_RANGE $END_RANGE); do
 	wget -P $TARGET_PATH --show-progress "${BASE_URL}${ISSUE_NUMBER}".pdf;
 done;
+
+[[ -n "$SERIES" ]] && { echo "Adding downloaded issue to calibre library"; 
+			calibre -s;
+			calibredb add "$TARGET_PATH"/MagPi"$ISSUE_NUMBER".pdf --series="$SERIES";
+			calibre& }
 
 exit 0
